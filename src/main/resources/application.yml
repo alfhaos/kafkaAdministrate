@@ -1,4 +1,8 @@
 spring:
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
   datasource:
     url: jdbc:h2:tcp://localhost:9099/~/kafkaAd
     username: sa
@@ -16,8 +20,18 @@ spring:
           threadPool:
             class: org.quartz.simpl.SimpleThreadPool
   kafka:
-     consumer:
-      auto-offset-reset: latest
+   bootstrap-servers: localhost:9092
+   
+   consumer:
+      bootstrap-servers: localhost:9092
+      group-id: JHB
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+   producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
       
 mybatis:
   type-aliases-package: com.vtw.administrate

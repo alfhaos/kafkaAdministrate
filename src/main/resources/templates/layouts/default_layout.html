@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8" />
+    <title>thymeleaf layout</title>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0" />
+    <!-- content script -->
+    <th:block layout:fragment="css"></th:block>
+    <!-- content script -->
+    <th:block layout:fragment="script">
+    	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    	<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    </th:block>
+</head>
+<body>
+    <!-- header fragment 사용 -->
+    <th:block th:replace="~{fragments/header :: headerFragment}"></th:block>
+    <!-- content fragment 사용 -->
+    <th:block layout:fragment="content"></th:block>
+    <!-- footer fragment 사용 -->
+    <th:block th:replace="~{fragments/footer :: footerFragment}"></th:block>
+</body>
+</html>

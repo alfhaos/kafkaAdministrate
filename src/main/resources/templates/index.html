@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<meta charset="UTF-8">
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!--    <link rel="stylesheet" th:href="@{/css/page/home.css}" >-->
+</th:block>
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!--    <script th:src="@{/js/page/home.js}"></script>-->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    
+    <script>
+		function createTopicBtn() {
+			
+			var formValues = $("form[name=topicForm]").serialize();
+			
+	    	$.ajax({
+	      		url:'/admin/createTopic',
+	      		type:'post',
+	      		data: formValues,
+	      		success:function(result){
+	            	alert("토픽 생성 성공")
+	      		},
+	      		error : function(){alert("토픽 생성 실패.");}
+	      	});
+		}
+    </script>
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+	<div>
+		<form name = "topicForm">
+			<input placeholder="토픽명 입력" type="text" name = "topicName">
+			<input value="1" type="text" readonly="readonly" name = "replicationFactor">
+			<input placeholder="파티션 입력" type="number" name = "partition">
+			<button onclick="createTopicBtn();" type="button">토픽 생성</button>
+		</form>
+	</div>
+	
+	<div>
+		<table border="1">
+			<tr>
+				<th>토픽명</th>
+				<th>삭제</th>
+				<th>변경</th>
+			</tr>
+			
+			<tr th:each="topic : ${topicList}">
+				<td th:text="${topic}"></td>
+				<td><button>삭제</button></td>
+				<td><button>변경</button></td>
+			</tr>
+		</table>
+	</div>
+	
+</div>
+</html>
