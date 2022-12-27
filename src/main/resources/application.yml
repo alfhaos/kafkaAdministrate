@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost:9099/~/kafkaAd
+    username: sa
+    password: a
+    driver-class-name: org.h2.Driver
+  quartz:
+    auto-startup: true
+    properties:
+      org:
+        quartz:
+          jobstroe:
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            misfireThreshold : 60000
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+  kafka:
+     consumer:
+      auto-offset-reset: latest
+      
+mybatis:
+  type-aliases-package: com.vtw.administrate
+  mapper-locations: classpath*:mapper/**/*-mapper.xml
