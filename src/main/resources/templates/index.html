@@ -16,6 +16,32 @@
     <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
     
     <script>
+    
+    $(() => {
+    	
+    	$(".deleteBtn").click((e) => {
+    		var topicName = $(e.target).val();
+    		
+	    	$.ajax({
+	      		url:'/admin/deleteTopic',
+	      		type:'post',
+	      		data: {"topicName" : topicName},
+	      		success:function(result){
+					$("."+topicName).remove();
+	      		},
+	      		error : function(){alert("토픽 삭제 실패.");}
+	      	});
+    	});
+    	
+    	$(".detailBtn").click((e) => {
+    		var topicName = $(e.target).val();
+    		
+    		location.href = "/page/topicDetail?topicName="+topicName;
+    		
+    	});
+    	
+    	
+    });
 		function createTopicBtn() {
 			
 			var formValues = $("form[name=topicForm]").serialize();
@@ -38,7 +64,7 @@
 	<div>
 		<form name = "topicForm">
 			<input placeholder="토픽명 입력" type="text" name = "topicName">
-			<input value="1" type="text" readonly="readonly" name = "replicationFactor">
+			<input placeholder="replicationFactor 입력" type="number" name = "replicationFactor">
 			<input placeholder="파티션 입력" type="number" name = "partition">
 			<button onclick="createTopicBtn();" type="button">토픽 생성</button>
 		</form>
@@ -52,10 +78,10 @@
 				<th>변경</th>
 			</tr>
 			
-			<tr th:each="topic : ${topicList}">
+			<tr th:each="topic : ${topicList}" th:class="${topic}">
 				<td th:text="${topic}"></td>
-				<td><button>삭제</button></td>
-				<td><button>변경</button></td>
+				<td><button class = "deleteBtn" th:value="${topic}">삭제</button></td>
+				<td><button class = "detailBtn" th:value="${topic}">조회</button></td>
 			</tr>
 		</table>
 	</div>

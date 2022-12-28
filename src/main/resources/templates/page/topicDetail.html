@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<meta charset="UTF-8">
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!--    <link rel="stylesheet" th:href="@{/css/page/home.css}" >-->
+	<style>
+		#popup01{
+		    display: none;
+		}
+		#popup01{
+		width: 500px;
+		height: 500px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin: -250px 0 0 -250px;
+		background-color: #fff;
+		z-index: 2;
+		    }
+		.backon{
+		    content: "";
+		    width: 100%;
+		    height: 100%;
+		    background: #00000054;
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    z-index: 1;
+		}
+		.close{
+		  position:absolute;
+		  top:-25px;
+		  right: 0;
+		  cursor:pointer;
+		}
+		
+		.openPopup{
+		
+		  cursor:pointer;
+		
+		}
+		
+	</style>
+</th:block>
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!--    <script th:src="@{/js/page/home.js}"></script>-->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <script>
+    
+   		$(() => {
+    	
+			$("#modifyBtn").click((e) => {
+				var topicName = $(e.target).val(); 
+				
+				 $("#popup01").show();   //팝업 오픈
+				 $("body").append('<div class="backon"></div>'); //뒷배경 생성
+			});
+			
+		    $("body").on("click", function(event) { 
+		        if(event.target.className == 'close' || event.target.className == 'backon'){
+		            $("#popup01").hide(); //close버튼 이거나 뒷배경 클릭시 팝업 삭제
+		              $(".backon").hide();
+		        }
+		      });
+		});
+   		
+   		function modifyPartition() {
+   			
+   			var formValues = $("form[name=modifyForm]").serialize();
+   			
+   			$.ajax({
+	      		url:'/admin/modifyPartition',
+	      		type:'post',
+	      		data: formValues,
+	      		success:function(result){
+	            	alert("파티션 변경 성공")
+	      		},
+	      		error : function(){alert("토픽 생성 실패.");}
+	      	});
+   		}
+
+    </script>
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+	
+	<div>
+		<table border="1">
+			<tr>
+				<th>토픽명</th>
+				<th>partition</th>
+				<th>leader</th>
+				<th>replicas</th>
+				<th>isr</th>
+			</tr>
+			
+			<tr th:each="partition : ${partitions}" th:class="${topic}">
+				<td th:text="${topicName}"></td>
+				<td><input th:value = "${partition.partition}"></td>
+				<td><input th:value = "${partition.leader.id}"></td>
+				<td>
+					<select>
+						<option value="">replicas 조회</option>
+						<option th:each = "node : ${partition.replicas}" th:value="${node.id}" th:text="${node.id}"></option>
+					</select>
+				</td>
+				<td>					
+					<select>
+						<option value="">isr 조회</option>
+						<option th:each = "node : ${partition.isr}" th:value="${node.id}" th:text="${node.id}"></option>
+					</select>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div>
+		<button type="button" id = "modifyBtn" th:value = "${topicName}">파티션 추가</button>
+	</div>
+	
+	<div id="popup01">
+	    <div class="close">close</div>
+	    <div>
+	    	<form name = "modifyForm">
+				<input type="text" name = "topicName" th:text = "${topicName}" th:value = "${topicName}">
+				<input type="number" name = "partition" placeholder="파티션 수 입력">
+				<button type="button" onclick = "modifyPartition();">저장</button>
+			</form>
+		</div>
+	</div>
+	
+</div>
+</html>

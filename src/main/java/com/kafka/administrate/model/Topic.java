@@ -24,5 +24,10 @@ public class Topic {
 	public void setPartition(int partition) {
 		this.partition = partition;
 	}
+	@Override
+	public String toString() {
+		return "Topic [topicName=" + topicName + ", replicationFactor=" + replicationFactor + ", partition=" + partition
+				+ "]";
+	}
 	
 }

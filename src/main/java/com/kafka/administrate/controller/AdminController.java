@@ -21,4 +21,18 @@ public class AdminController {
 		adminService.createTopic(topic);
 		
 	}
+	
+	@PostMapping("deleteTopic")
+	public void deleteTopic(Topic topic) {
+		
+		adminService.deleteTopic(topic);
+		
+	}
+	
+	@PostMapping("modifyPartition")
+	public void modifyPartition(Topic topic) {
+		
+		adminService.modifyPartition(topic);
+		
+	}
 }
