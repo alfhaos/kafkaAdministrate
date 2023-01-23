@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<meta charset="UTF-8">
+<!-- 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!--    <script th:src="@{/js/page/home.js}"></script>-->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+	
+	<div>
+		<table border="1">
+			<tr>
+				<th>브로커ID</th>
+				<th>zookeeper.connect</th>
+				<th>zookeeper.session.timeout.ms</th>
+				<th>request.timeout.ms</th>
+				<th>replica.socket.timeout.ms</th>
+				<th>group.max.size</th>
+				<th>min.insync.replicas</th>
+			</tr>
+			
+			<tr  th:each="config : ${brokerConfig}">
+				<td th:text="${config.value}"></td>
+			</tr>
+		</table>
+	</div>
+	
+	<div>
+		<button type="button" id = "leaderBtn" th:value = "${topicName}">리더 변경</button>		
+	</div>
+	
+	<div id="popup01">
+	    <div class="close">close</div>
+	    <div>
+	    	<form name = "modifyForm">
+				<input type="text" name = "topicName" th:text = "${topicName}" th:value = "${topicName}">
+				<input type="number" name = "partition" placeholder="파티션 수 입력">
+				<button type="button" onclick = "modifyPartition();">저장</button>
+			</form>
+		</div>
+	</div>
+	
+</div>
+</html>

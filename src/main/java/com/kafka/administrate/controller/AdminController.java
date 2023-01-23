@@ -1,6 +1,7 @@
 package com.kafka.administrate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,5 +35,18 @@ public class AdminController {
 		
 		adminService.modifyPartition(topic);
 		
+	}
+	
+	@GetMapping("changeLeader")
+	public void changeLeader(Topic topic) {
+		
+		adminService.changeLeader(topic);
+		
+	}
+	
+	@GetMapping("leaderBroker")
+	public void leaderBroker(String broker) {
+		
+		adminService.leaderBroker(broker);
 	}
 }

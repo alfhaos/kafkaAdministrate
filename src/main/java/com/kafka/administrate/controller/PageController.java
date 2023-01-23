@@ -1,11 +1,11 @@
 package com.kafka.administrate.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.admin.ListTopicsResult;
 import org.apache.kafka.clients.admin.TopicDescription;
-import org.apache.kafka.common.Node;
 import org.apache.kafka.common.TopicPartitionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,5 +39,14 @@ public class PageController {
 		model.addAttribute("partitions", topicDescription.partitions());
 		model.addAttribute("topicName", topicDescription.name());
 		return "page/topicDetail";
+	}
+	
+	@GetMapping("/page/leaderBrokerDetail")
+	public String leaderBrokerPage(String broker, Model model) {
+		
+		Map<String,String> brokerConfig = adminService.leaderBroker(broker);
+		model.addAttribute("brokerConfig",brokerConfig);
+		
+		return "page/brokerDetail";
 	}
 }

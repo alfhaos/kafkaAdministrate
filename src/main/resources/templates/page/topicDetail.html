@@ -72,6 +72,24 @@
 		              $(".backon").hide();
 		        }
 		      });
+		    
+		    
+		    $(".brokerDetailBtn").click((e) => {
+		    	
+		    	var broker = $(e.target).val();
+		    		
+		    	location.href = "/page/leaderBrokerDetail?broker="+ broker;
+		    	/*
+	   			$.ajax({
+		      		url:'/admin/leaderBroker',
+		      		type:'get',
+		      		data: {"broker" : broker},
+		      		success:function(result){
+		            	alert("파티션 변경 성공")
+		      		},
+		      		error : function(){alert("토픽 생성 실패.");}
+		      	});*/
+		    });
 		});
    		
    		function modifyPartition() {
@@ -103,6 +121,7 @@
 				<th>leader</th>
 				<th>replicas</th>
 				<th>isr</th>
+				<th>리더브로커 조회</th>
 			</tr>
 			
 			<tr th:each="partition : ${partitions}" th:class="${topic}">
@@ -121,6 +140,7 @@
 						<option th:each = "node : ${partition.isr}" th:value="${node.id}" th:text="${node.id}"></option>
 					</select>
 				</td>
+				<td><button th:value = "${partition.leader.id}" type="button" class="brokerDetailBtn">리더 브로커 조회</button></td>
 			</tr>
 		</table>
 	</div>
