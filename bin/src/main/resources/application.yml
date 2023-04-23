@@ -3,11 +3,11 @@ spring:
     cache: false
     prefix: classpath:/templates/
     suffix: .html
-  datasource:
-    url: jdbc:oracle:thin:@//localhost:1521/SYS
-    username: system
-    password: 1234
-    driver-class-name: oracle.jdbc.OracleDriver
+  ##datasource:
+    #url: jdbc:h2:tcp://localhost:9099/~/kafkaAd
+    #username: sa
+    #password: a
+    #driver-class-name: org.h2.Driver
   quartz:
     auto-startup: true
     properties:

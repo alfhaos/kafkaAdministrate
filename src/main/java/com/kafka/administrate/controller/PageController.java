@@ -1,12 +1,10 @@
 package com.kafka.administrate.controller;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.admin.ListTopicsResult;
 import org.apache.kafka.clients.admin.TopicDescription;
-import org.apache.kafka.common.TopicPartitionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +32,6 @@ public class PageController {
 	public String detailPage(Topic topic, Model model) throws InterruptedException, ExecutionException {
 		
 		TopicDescription topicDescription = adminService.topicDetail(topic);
-		 List<TopicPartitionInfo> list = topicDescription.partitions();
 
 		model.addAttribute("partitions", topicDescription.partitions());
 		model.addAttribute("topicName", topicDescription.name());

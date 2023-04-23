@@ -1,5 +1,7 @@
 package com.kafka.administrate.controller;
 
+import java.util.concurrent.ExecutionException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +40,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("changeLeader")
-	public void changeLeader(Topic topic) {
+	public void changeLeader(Topic topic) throws InterruptedException, ExecutionException {
 		
 		adminService.changeLeader(topic);
 		
@@ -48,5 +50,11 @@ public class AdminController {
 	public void leaderBroker(String broker) {
 		
 		adminService.leaderBroker(broker);
+	}
+	@PostMapping("modifyReplicas")
+	public void modifyReplicas(Topic topic) throws InterruptedException, ExecutionException {
+		
+		adminService.modifyReplicas(topic);
+		
 	}
 }
