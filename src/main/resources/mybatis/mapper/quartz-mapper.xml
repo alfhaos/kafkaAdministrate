@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+ <mapper namespace = "com.kafka.administrate.mapper.MemberMapper">
+
+ 	<select id="checkId" resultType="boolean">
+		SELECT
+			DECODE(COUNT(ID), 0 ,'TRUE', 'FALSE') AS RESULT
+		FROM
+			KAFKA_USER
+		WHERE
+			ID = #{id}
+ 	</select>
+ 	
+	<update id="signUpUser">
+		MERGE 
+			INTO KAFKA_USER A
+		USING DUAL
+			ON (A.ID = #{id})
+		WHEN MATCHED THEN 
+			UPDATE 
+				SET  A.PWD       = #{pwd} 
+					,A.UDATE     = SYSDATE 
+					,A.AUTHORITY = 'U'
+					,A.NAME      = #{name}
+					,A.PHONE_NUMBER = #{phoneNumber}
+		WHEN NOT MATCHED THEN 
+			INSERT (A.ID,A.PWD,A.UDATE,A.AUTHORITY,A.NAME,A.PHONE_NUMBER)
+			VALUES (#{id},#{pwd},SYSDATE,'U',#{name},#{phoneNumber})
+	</update>
+ 	
+ 	<select id="signIn" resultType="boolean">
+		 SELECT 
+			COUNT(*)
+		 FROM
+			KAFKA_USER
+		 WHERE
+			ID = #{id}
+			AND PWD = #{pwd}
+	 </select>
+ </mapper>

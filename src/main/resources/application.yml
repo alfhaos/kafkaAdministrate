@@ -4,10 +4,12 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
   datasource:
-    url: jdbc:oracle:thin:@//localhost:1521/SYS
-    username: system
+    ## 1. 기존 사용하던 jdbc:oracle 로 시작하는 url 에서 jdbc:log4jdbc:oracle 로 시작하는 url 로 변경.
+    url: jdbc:log4jdbc:oracle:thin:@//localhost:1521/SYS
+    username: KAFKA
     password: 1234
-    driver-class-name: oracle.jdbc.OracleDriver
+    ## 드라이버 클래스 변경(MYBATIS 쿼리 로그를 위해)
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
   quartz:
     auto-startup: true
     properties:
@@ -34,5 +36,5 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       
 mybatis:
-  type-aliases-package: com.vtw.administrate
-  mapper-locations: classpath*:mapper/**/*-mapper.xml
+  type-aliases-package: com.kafka.administrate.mapper
+  mapper-locations: classpath*:mybatis/**/*-mapper.xml

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<meta charset="UTF-8">
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!--    <link rel="stylesheet" th:href="@{/css/page/home.css}" >-->
+
+   	<style>
+     	#kafkaLogo {
+			 width: 10%;
+		 }
+		.loginContainer {
+			height: 100%;
+			 text-align: center;
+			 background-color: rgb(0, 0, 0, .1);
+		 }
+		 .form-floating {
+			width: 30%;
+    		margin: 0 auto;
+    		margin-bottom: 1%;
+		 }
+		 .w-100.btn.btn-lg.btn-primary{
+			margin-top: 1%;
+    		width: 30% !important;
+		 }
+		 .input-group{
+			margin : 0 auto;
+ 			margin-top: 1%;
+    		width: 30% !important;
+    		height: 50px;
+		 }
+		 .separator {
+			 padding-left: 10px;
+			 padding-right: 10px;
+		 }
+		 .otherTable {
+			 margin: 0 auto;
+			 
+		 }
+		 .otherBtn {
+			 margin-top: 2%;
+		 }
+		 th > a {
+  			text-decoration: none;
+  			color: grey;
+		}
+		html {
+			height: 100%;
+		}
+		body {
+			height: 100%;
+			overflow: hidden;
+		}
+		.content {
+			height: 100%;
+		}
+		.btn.btn-primary{
+			width: 30%;
+		}
+		.chkIdResultContainer {
+			margin-top: -1%;
+    		margin-bottom: 1%;
+    		display: none;
+		}
+		.chkIdsuccess{
+			width: 30%;
+    		margin: 0 auto;
+    		text-align: left;
+    		color: green;
+    		display:none;
+    		font-size: 12px;
+		}
+		.chkIdFalse{
+			width: 30%;
+    		margin: 0 auto;
+    		text-align: left;
+    		color: red;
+    		display: none;
+    		font-size: 12px;
+		}
+    </style>
+</th:block>
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script>
+    	
+   		$(() => {
+			var chkResult = false;
+			var chkResultCnt = 0;
+			
+			$("#chkIdBtn").click((e) => {
+				var userId = $("#userId").val();
+				chkResultCnt = 1;
+				
+				$.ajax({
+		      		url:'/member/checkId',
+		      		type:'get',
+		      		data: {"id" : userId},
+		      		success:function(result){
+					
+						if(result) {
+							// 아이디 중복 결과 성공
+							$(".chkIdResultContainer").css("display","block");
+							$(".chkIdsuccess").css("display","block");
+							$(".chkIdFalse").css("display","none");
+							chkResult = true;
+						} else {
+							// 아이디 중복 결과 실패
+							$(".chkIdResultContainer").css("display","block");
+							$(".chkIdsuccess").css("display","none");
+							$(".chkIdFalse").css("display","block");
+							chkResult = false; 
+						}
+						
+	      			},
+	      			error : function(){alert("아이디 중복 체크 실패.");}
+	      		});
+			});
+			
+			$("#signUpBtn").click((e) => {
+				var userId 		   = $("#userId").val();
+				var pwd    		   = $("#userPwd").val();
+				var name    	   = $("#userName").val();
+				var phoneNumber    = $("#phoneNumber").val();
+				
+				if(chkResultCnt == 0) {
+					alert("아이디 중복 체크를 진행해주세요.");
+					return;
+				} else if(chkResult) {
+					$.ajax({
+		      			url:'/member/signUp',
+		      			type:'post',
+		      			data: {"id"   : userId,
+		      				   "pwd"  : pwd,
+		      				   "name" : name,
+		      				   "phoneNumber" : phoneNumber},
+		      			success:function(result){
+							
+							if(result) {
+								location.href = "/page/test";
+							} else {
+
+							}
+						
+	      			},
+	      				error : function(){alert("회원가입 실패.");}
+	      		});
+				} else {
+					alert("해당 아이디는 사용이 불가능합니다.");
+					return;
+				}
+				
+			});
+			
+   		});
+		function addHyphen(e) {
+		  var len = e.value.length;
+		  if (len == 3 || len == 8) {
+		  	e.value += '-';
+		  	}
+		 }
+    </script>
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content" class = "content">
+	<div class = "loginContainer">
+		<img th:src="@{/img/kafka_logo.png}" id = "kafkaLogo">
+		<div><h3>회원가입</h3></div>
+		<div class="signUpInputContainer">
+			<form class="signUpForm">
+				<div class="input-group mb-3">
+				  <input type="text" name ="userId" id="userId" class="form-control" placeholder="ID" aria-label="Recipient's username" aria-describedby="button-addon2">
+				  <button class="btn btn-success" type="button" id="chkIdBtn">아이디 확인</button>
+				</div>
+				<div class = "chkIdResultContainer">
+					<div class="chkIdsuccess">
+					  해당 아이디는 사용 가능합니다.
+					</div>
+					<div class="chkIdFalse">
+					  해당 아이디는 사용이 불가능합니다 다른아이디를 사용해주세요.
+					</div>
+				</div>
+				<div class="form-floating">
+			  		<input type="password" name = "userPwd" class="form-control" id="userPwd" placeholder="Password">
+			  		<label for="floatingPassword">Password</label>
+				</div>
+				<div class="form-floating">
+			  		<input type="text" name = "userPwd" class="form-control" id="userName" placeholder="Name">
+			  		<label for="floatingPassword">Name</label>
+				</div>
+				<div class="form-floating">
+			  		<input type="text" name = "userPwd" class="form-control" id="phoneNumber" placeholder="PhoneNumber" onkeyup="addHyphen(this);">
+			  		<label for="floatingPassword">PhoneNumber</label>
+				</div>
+				<button type="button" id ="signUpBtn" class="btn btn-primary">회원가입</button>
+			</form>
+		</div>
+	</div>
+</div>
+</html>

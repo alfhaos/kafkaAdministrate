@@ -7,125 +7,26 @@
 <!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
-		
-		#topicNameBox {
-			width: 30%;
-			margin-right: 5px;
-		}
-		#rcfBox {
-			width: 20%;
-			margin-right: 5px;
-		}
-		#partitionBox {
-			width: 20%;
-			margin-right: 5px;
-		}
-		#topicForm {
-			display: flex;
-		}
-		#btnCreate {
-			height: 10%;
-		}
-		
+
 	</style>
 </th:block>
 <!-- index.html 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
-    <!--    <script th:src="@{/js/page/home.js}"></script>-->
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+
     <script>
     
     $(() => {
     	
-    	$("button[name=deleteBtn]").click((e) => {
-    		var topicName = $(e.target).val();
-    		
-	    	$.ajax({
-	      		url:'/admin/deleteTopic',
-	      		type:'post',
-	      		data: {"topicName" : topicName},
-	      		success:function(result){
-					$("." + topicName).remove();
-					//데이터 삭제 후 문제
-	      		},
-	      		error : function(){alert("토픽 삭제 실패.");}
-	      	});
-    	});
-    	
-    	$("button[name=detailBtn]").click((e) => {
-    		var topicName = $(e.target).val();
-    		
-    		location.href = "/page/topicDetail?topicName="+topicName;
-    		
-    	});
-    	
     	
     });
-		function createTopicBtn() {
-			
-			var formValues        = $("form[name=topicForm]").serialize();
-			var topicName         = $("#topicName").val();
-			var replicationFactor = $("#replicationFactor").val();
-			var partition         = $("#partition").val();
-			
-			
-	    	$.ajax({
-	      		url:'/admin/createTopic',
-	      		type:'post',
-	      		data: formValues,
-	      		success:function(result){
-	            	alert("토픽 생성 성공");
-	            	var addTd = "<tr><td>" + topicName + "</td><td><button class='btn btn-danger' name = 'deleteBtn' id = 'deleteBtn' th:value="+ topicName+">삭제</button></td>"+
-	            	 "<td><button class='btn btn-primary' name = 'detailBtn' id = 'detailBtn' th:value="+ topicName +">조회</button></td></tr>";
-	            	
-	            	$("#topicLst").append(addTd);
-	            	$("#topicName").text("");
-	            	$("#replicationFactor").text("");
-	            	$("#partition").text("");          	
-	      		},
-	      		error : function(){alert("토픽 생성 실패.");}
-	      	});
-		}
+	
     </script>
 </th:block>
 
 <!-- Content -->
 <div layout:fragment="content">
 	<div>
-		<form name = "topicForm" id = "topicForm">
-			<div class="input-group mb-3" id = "topicNameBox">
-  				<span class="input-group-text" id="basic-addon1">토픽명</span>
-  				<input type="text" id = "topicName" name = "topicName" class="form-control" placeholder="토픽명 입력" aria-label="Username" aria-describedby="basic-addon1">
-			</div>
-			<div class="input-group mb-3" id = "rcfBox">
-  				<span class="input-group-text" id="basic-addon1">replicationFactor</span>
-  				<input type="number" id = "replicationFactor" name = "replicationFactor" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-			</div>
-			<div class="input-group mb-3" id = "partitionBox">
-  				<span class="input-group-text" id="basic-addon1">partition</span>
-  				<input type="number" id = "partition" name = "partition" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-			</div>
-			<button onclick="createTopicBtn();" class="btn btn-success" id ="btnCreate" type="button">토픽 생성</button>
-		</form>
+		<span>환영합니다.</span>
 	</div>
-	
-	<div>
-		<table border="1" class="table table-striped" id = "topicLst">
-			<tr>
-				<th>토픽명</th>
-				<th>삭제</th>
-				<th>변경</th>
-			</tr>
-			
-			<tr th:each="topic : ${topicList}" th:class="${topic}">
-				<td th:text="${topic}"></td>
-				<td><button class="btn btn-danger" name = "deleteBtn" id = "deleteBtn" th:value="${topic}">삭제</button></td>
-				<td><button class="btn btn-primary" name = "detailBtn" id = "detailBtn" th:value="${topic}">조회</button></td>
-			</tr>
-		</table>
-	</div>
-	
 </div>
 </html>

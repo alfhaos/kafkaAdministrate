@@ -25,7 +25,7 @@ public class PageController {
 		ListTopicsResult result = adminService.topicList();
 		model.addAttribute("topicList", result.names().get());
 	
-		return "index";
+		return "/index";
 	}
 	
 	@GetMapping("/page/topicDetail")
@@ -46,4 +46,16 @@ public class PageController {
 		
 		return "page/brokerDetail";
 	}
+	@GetMapping("/page/member/signUp")
+	public String leaderBrokerPage() {
+		
+		return "page/member/signUp";
+	}
+	
+	@GetMapping("/page/member/signIn")
+	public String test(Model model)  throws InterruptedException, ExecutionException {
+		
+		return "/page/member/login";
+	}
+	
 }

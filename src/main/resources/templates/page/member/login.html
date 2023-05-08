@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<meta charset="UTF-8">
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!--    <link rel="stylesheet" th:href="@{/css/page/home.css}" >-->
+
+   	<style>
+     	#kafkaLogo {
+			 width: 20%;
+		 }
+		.loginContainer {
+			height: 100%;
+			 text-align: center;
+			 background-color: rgb(0, 0, 0, .1);
+		 }
+		 .form-floating {
+			 width: 30%;
+    
+    		margin: 0 auto;
+		 }
+		 .w-100.btn.btn-lg.btn-primary{
+			margin-top: 1%;
+
+    		width: 30% !important;
+		 }
+		 .separator {
+			 padding-left: 10px;
+			 padding-right: 10px;
+		 }
+		 .otherTable {
+			 margin: 0 auto;
+			 
+		 }
+		 .otherBtn {
+			 margin-top: 2%;
+		 }
+		 th > a {
+  			text-decoration: none;
+  			color: grey;
+		}
+		html {
+			height: 100%;
+		}
+		body {
+			height: 100%;
+			overflow: hidden;
+		}
+		.content {
+			height: 100%;
+		}
+    </style>
+</th:block>
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!--    <script th:src="@{/js/page/home.js}"></script>-->
+
+    <script>
+   		$(() => {
+    		$("#signInBtn").click((e) => {
+				var id  = $("#userId").val();
+				var pwd = $("#pwd").val();
+				
+				$.ajax({
+		      		url:'/member/signIn',
+		      		type:'get',
+		      		data: {"id"   : id,
+		      			   "pwd"  : pwd},
+		      		success:function(result){
+						if(result) {
+							location.href = "/";
+						} else {
+
+						}
+						
+	      			},
+	      			error : function(){alert("로그인 실패.");}
+	      		});
+			});
+		
+   		});
+
+    </script>
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content" class = "content">
+	<div class = "loginContainer">
+		<img th:src="@{/img/kafka_logo.png}" id = "kafkaLogo">
+		<div><h3>로그인</h3></div>
+		<div class="signUpInputContainer">
+			<div class="form-floating mb-3">
+ 				<input type="text" id = "userId" class="form-control" placeholder="name@example.com">
+  				<label for="floatingInput">ID</label>
+			</div>
+			<div class="form-floating">
+		  		<input type="password" id = "pwd" class="form-control" placeholder="Password">
+		  		<label for="floatingPassword">Password</label>
+			</div>
+		</div>
+		<div class = "signBtn">
+			<button class="w-100 btn btn-lg btn-primary" id = "signInBtn" type="button">로그인</button>
+			<div class = "otherBtn">
+				<table class = "otherTable">
+					<tr>
+						<th><a href="#">아이디 찾기</a></th>
+						<th class="separator">|</th>
+						<th><a href="#">비밀번호 찾기</a></th>
+						<th class="separator">|</th>
+						<th><a href="/page/member/signUp">회원가입</a></th>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

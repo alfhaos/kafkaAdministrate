@@ -12,6 +12,9 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.AlterConfigOp;
+import org.apache.kafka.clients.admin.AlterConfigsResult;
 import org.apache.kafka.clients.admin.Config;
 import org.apache.kafka.clients.admin.ConfigEntry;
 import org.apache.kafka.clients.admin.DescribeConfigsResult;
@@ -26,6 +29,7 @@ import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.TopicPartitionInfo;
 import org.apache.kafka.common.config.ConfigResource;
+import org.apache.kafka.common.config.TopicConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -181,6 +185,7 @@ public class AdminServiceImpl implements AdminService{
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			
 		} finally {
 			admin.close();			
 		}
@@ -193,7 +198,8 @@ public class AdminServiceImpl implements AdminService{
 		
 		String topicName = topic.getTopicName();
 		String replicationFactor = Integer.toString(topic.getReplicationFactor());
-		
+
+        
         // Topic Config 조회
 		ConfigResource configResource = new ConfigResource(ConfigResource.Type.TOPIC, topicName);
 	    DescribeConfigsResult describeConfigsResult = adminClient.describeConfigs(Collections.singleton(configResource));
@@ -205,8 +211,6 @@ public class AdminServiceImpl implements AdminService{
         Map<ConfigResource, Config> updateConfigs = Collections.singletonMap(configResource, newConfig);
         adminClient.alterConfigs(updateConfigs).all().get();
 
-        // AdminClient 종료
-        adminClient.close();
 	}
 
 }
