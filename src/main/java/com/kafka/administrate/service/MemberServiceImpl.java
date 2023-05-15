@@ -31,4 +31,10 @@ public class MemberServiceImpl implements MemberService{
 		return memberMapper.signIn(user);
 	}
 
+	@Override
+	public int countChatRoom(User loginUser) {
+		// TODO Auto-generated method stub
+		return memberMapper.countChatRoom(loginUser);
+	}
+
 }

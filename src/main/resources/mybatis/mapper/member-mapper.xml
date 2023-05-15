@@ -40,4 +40,13 @@
 			ID = #{id}
 			AND PWD = #{pwd}
 	 </select>
+	 
+	 <select id="countChatRoom" resultType="int">
+		 SELECT 
+			COUNT(*)
+		 FROM
+			KAFKA_CHAT_ROOM
+		 WHERE ID = #{id}
+		   AND DEL_YN = 'N'
+	 </select>
  </mapper>

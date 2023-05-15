@@ -5,7 +5,7 @@
 <div th:fragment="headerFragment">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Kafka Project</a>
+    <img th:src ="@{/images/logo.png}" id = "headerKafkaLogo">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -18,7 +18,7 @@
           <a class="nav-link" href="#">카프카 관리</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">실시간 채팅</a>
+          <a class="nav-link" href="/page/chat">실시간 채팅</a>
         </li>
         <li class="nav-item">
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>

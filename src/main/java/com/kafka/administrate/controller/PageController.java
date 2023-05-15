@@ -11,7 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.kafka.administrate.model.Topic;
+import com.kafka.administrate.model.member.User;
 import com.kafka.administrate.service.AdminService;
+import com.kafka.administrate.service.MemberService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PageController {
@@ -19,6 +24,12 @@ public class PageController {
 	@Autowired
 	private AdminService adminService;
 	
+	@Autowired
+	private MemberService memberService;
+	
+	@Autowired
+	private HttpServletRequest request;
+
 	@GetMapping("/")
 	public String indexPage(Model model) throws InterruptedException, ExecutionException {
 		
@@ -56,6 +67,16 @@ public class PageController {
 	public String test(Model model)  throws InterruptedException, ExecutionException {
 		
 		return "/page/member/login";
+	}
+	@GetMapping("/page/chat")
+	public String chat(Model model) {
+		
+	    HttpSession session = request.getSession();
+	    User loginUser = (User) session.getAttribute("userSeesionData");
+		int result = memberService.countChatRoom(loginUser);
+		
+		model.addAttribute("countChatRoom",result);
+		return "/page/member/chat";
 	}
 	
 }

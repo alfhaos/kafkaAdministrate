@@ -29,13 +29,12 @@ public class LoginFilter implements Filter {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("userSeesionData");
         if(!uri.equals("/page/member/signIn") && !uri.equals("/page/member/signUp") 
-        		&& !uri.equals("/member/signIn") && !uri.equals("/member/signUp") && !uri.equals("/member/checkId")) {
+        		&& !uri.equals("/member/signIn") && !uri.equals("/member/signUp") && !uri.equals("/member/checkId")  && !uri.endsWith(".png")) {
             if (user == null) {
                 response.sendRedirect("/page/member/signIn");
                 return;
             }
         }
-
 
         filterChain.doFilter(request, response);
     

@@ -11,4 +11,6 @@ public interface MemberService {
 
 	boolean signIn(User user);
 
+	int countChatRoom(User loginUser);
+
 }
