@@ -14,7 +14,7 @@ public interface MemberMapper {
 	public Boolean signUpUser(User user);
 
 	//로그인
-	public boolean signIn(User user);
+	public User signIn(User user);
 
 	//채팅 목록 확인
 	public int countChatRoom(User loginUser);

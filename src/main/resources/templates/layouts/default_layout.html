@@ -10,6 +10,27 @@
     <th:block layout:fragment="css">
  
 	</th:block>
+	<th:block layout:fragment="header">
+    	<style>
+		
+			#memberInfo{
+				
+			    align-content: right;
+			    position: relative;
+			    left: 25%;
+			    top: 20;
+			    margin-bottom: 1%;
+			}
+			
+			#loginInfo {
+				margin-bottom: 1px !important;
+				
+			}
+			#userNameSpan {
+				text-decoration: underline;
+			}
+		</style>
+	</th:block>
 	<th:block layout:fragment="footer">
     	<style>
 		
@@ -19,7 +40,10 @@
     			background-color: #f8f9fa;
 			}
 			#headerKafkaLogo {
-				width: 10%;
+				width: 100%;
+			}
+			#headerLogo {
+				width: 8%;
 			}
 		</style>
 	</th:block>
@@ -35,6 +59,17 @@
     </th:block>
     <th:block layout:fragment="script">
 
+    </th:block>
+    <th:block layout:fragment="header">
+		 <script>
+    
+   			$(() => {
+    	
+    		});
+			function fnLogOut() {
+				location.href = "/page/member/signIn";
+			}
+    	</script>
     </th:block>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>

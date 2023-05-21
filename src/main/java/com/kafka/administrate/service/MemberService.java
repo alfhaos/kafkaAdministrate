@@ -9,7 +9,7 @@ public interface MemberService {
 
 	boolean signUpUser(User user);
 
-	boolean signIn(User user);
+	User signIn(User user);
 
 	int countChatRoom(User loginUser);
 

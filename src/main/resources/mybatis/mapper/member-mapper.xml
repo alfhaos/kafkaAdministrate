@@ -4,7 +4,15 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
  <mapper namespace = "com.kafka.administrate.mapper.MemberMapper">
-
+	<resultMap id="userResultMap" type="User">
+	  	<id property="id" 		       column="id" />
+	  	<result property="pwd"         column="pwd" />
+	  	<result property="uDate"       column="uDate" />
+	  	<result property="authority"   column="authority" />
+	  	<result property="name"        column="name" />
+	  	<result property="phoneNumber" column="phone_number" />
+	</resultMap>
+ 	
  	<select id="checkId" resultType="boolean">
 		SELECT
 			DECODE(COUNT(ID), 0 ,'TRUE', 'FALSE') AS RESULT
@@ -21,8 +29,7 @@
 			ON (A.ID = #{id})
 		WHEN MATCHED THEN 
 			UPDATE 
-				SET  A.PWD       = #{pwd} 
-					,A.UDATE     = SYSDATE 
+				SET  A.UDATE     = SYSDATE 
 					,A.AUTHORITY = 'U'
 					,A.NAME      = #{name}
 					,A.PHONE_NUMBER = #{phoneNumber}
@@ -31,9 +38,14 @@
 			VALUES (#{id},#{pwd},SYSDATE,'U',#{name},#{phoneNumber})
 	</update>
  	
- 	<select id="signIn" resultType="boolean">
+ 	<select id="signIn" resultMap="userResultMap">
 		 SELECT 
-			COUNT(*)
+			ID
+           ,PWD
+           ,UDATE
+           ,AUTHORITY
+           ,NAME
+           ,PHONE_NUMBER
 		 FROM
 			KAFKA_USER
 		 WHERE

@@ -1,15 +1,17 @@
 package com.kafka.administrate.model.member;
 
-import lombok.Getter;
-import lombok.Setter;
-
+import java.util.Date;
 
 public class User {
 	
 	String id;
 	String pwd;
+	Date uDate;
 	String name;
 	String phoneNumber;
+	String authority;
+	String profileId;
+	
 	boolean chkId;
 
 	public String getId() {
@@ -42,6 +44,27 @@ public class User {
 	public void setChkId(boolean chkId) {
 		this.chkId = chkId;
 	}
+	
+	public Date getuDate() {
+		return uDate;
+	}
+	public void setuDate(Date uDate) {
+		this.uDate = uDate;
+	}
+	
+	public String getAuthority() {
+		return authority;
+	}
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
+	
+	public String getProfileId() {
+		return profileId;
+	}
+	public void setProfileId(String profileId) {
+		this.profileId = profileId;
+	}
 	public User() {
 		super();
 	}
@@ -66,6 +89,19 @@ public class User {
 		this.pwd = pwd;
 		this.name = name;
 		this.phoneNumber = phoneNumber;
+	}
+	public User(String id, String pwd, String name, String phoneNumber, String profileId) {
+		super();
+		this.id = id;
+		this.pwd = pwd;
+		this.name = name;
+		this.phoneNumber = phoneNumber;
+		this.profileId = profileId;
+	}
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", pwd=" + pwd + ", uDate=" + uDate + ", name=" + name + ", phoneNumber="
+				+ phoneNumber + ", authority=" + authority + ", chkId=" + chkId + "]";
 	}
 	
 }

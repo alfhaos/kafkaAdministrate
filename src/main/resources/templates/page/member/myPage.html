@@ -81,6 +81,30 @@
     		display: none;
     		font-size: 12px;
 		}
+		.profileContainer {
+		    width: 150px;
+		    height: 150px; 
+		    border-radius: 70%;
+		    overflow: hidden;
+		    margin: 0 auto;
+		}
+		.profile {
+		    width: 90%;
+		    height: 100%;
+		    object-fit: cover;
+		}
+		#userPwd {
+			width: 64%;
+		}
+		#myPagePwd {
+			display: flex;
+		}
+		#signUpBtn {
+			width: 15%;
+		}
+		#cancelBtn {
+			width: 15%;
+		}
     </style>
 </th:block>
 <!-- index.html 고유 스크립트 추가 -->
@@ -90,34 +114,20 @@
    		$(() => {
 			var chkResult = false;
 			var chkResultCnt = 0;
-			
-			$("#chkIdBtn").click((e) => {
-				var userId = $("#userId").val();
-				chkResultCnt = 1;
+			var profileId = null; 
+			$("#fileInput").on('change', function(event) {
+  				const file = event.target.files[0];
+  				const reader = new FileReader();
 				
-				$.ajax({
-		      		url:'/member/checkId',
-		      		type:'get',
-		      		data: {"id" : userId},
-		      		success:function(result){
-					
-						if(result) {
-							// 아이디 중복 결과 성공
-							$(".chkIdResultContainer").css("display","block");
-							$(".chkIdsuccess").css("display","block");
-							$(".chkIdFalse").css("display","none");
-							chkResult = true;
-						} else {
-							// 아이디 중복 결과 실패
-							$(".chkIdResultContainer").css("display","block");
-							$(".chkIdsuccess").css("display","none");
-							$(".chkIdFalse").css("display","block");
-							chkResult = false; 
-						}
-						
-	      			},
-	      			error : function(){alert("아이디 중복 체크 실패.");}
-	      		});
+				profileId = file.name;
+				
+				//파일 읽고 url 형식으로변경
+				reader.readAsDataURL(file);
+  				
+  				// url 형식 으로 변경됐을경우 호출되며 img 태그의 url 변경;
+  				reader.onload = function(e) {
+    				$(".profile").attr("src", e.target.result);
+  				};
 			});
 			
 			$("#signUpBtn").click((e) => {
@@ -126,33 +136,26 @@
 				var name    	   = $("#userName").val();
 				var phoneNumber    = $("#phoneNumber").val();
 				
-				if(chkResultCnt == 0) {
-					alert("아이디 중복 체크를 진행해주세요.");
-					return;
-				} else if(chkResult) {
-					$.ajax({
+				$.ajax({
 		      			url:'/member/signUp',
 		      			type:'post',
 		      			data: {"id"   : userId,
 		      				   "pwd"  : pwd,
 		      				   "name" : name,
-		      				   "phoneNumber" : phoneNumber},
+		      				   "phoneNumber" : phoneNumber,
+		      				   "profileId" : profileId},
 		      			success:function(result){
 							
 							if(result) {
-								alert("회원가입에 성공하셨습니다");
+								alert("저장 완료.");
 								location.href = "/page/member/signIn";
 							} else {
-
+								alert("저장에 실패했습니다.")
 							}
 						
 	      			},
-	      				error : function(){alert("회원가입 실패.");}
+	      				error : function(){alert("저장에 실패했습니다.");}
 	      		});
-				} else {
-					alert("해당 아이디는 사용이 불가능합니다.");
-					return;
-				}
 				
 			});
 			
@@ -168,36 +171,36 @@
 
 <!-- Content -->
 <div layout:fragment="content" class = "content">
-	<div class = "loginContainer">
-		<img th:src="@{/images/logo.png}" id = "kafkaLogo">
-		<div><h3>회원가입</h3></div>
+	<div class = "loginContainer">	 
+			<div class="profileContainer" style="background: whitesmoke;">
+			    <img class="profile" th:src="@{/images/member/Default-Profile.png}">
+			</div>
+			<div>
+				<form action="/member/profileUpload" method="post" enctype="multipart/form-data">
+ 					<input type="file" id = "fileInput" name="profileImage">
+ 					<input type="submit" value="Upload">
+				</form>
+			</div>
 		<div class="signUpInputContainer">
 			<form class="signUpForm">
 				<div class="input-group mb-3">
-				  <input type="text" name ="userId" id="userId" class="form-control" placeholder="ID" aria-label="Recipient's username" aria-describedby="button-addon2">
-				  <button class="btn btn-success" type="button" id="chkIdBtn">아이디 확인</button>
+				  <input type="text" th:value="${user.getId}" disabled name ="userId" id="userId" class="form-control" placeholder="ID" aria-label="Recipient's username" aria-describedby="button-addon2">
 				</div>
-				<div class = "chkIdResultContainer">
-					<div class="chkIdsuccess">
-					  해당 아이디는 사용 가능합니다.
-					</div>
-					<div class="chkIdFalse">
-					  해당 아이디는 사용이 불가능합니다 다른아이디를 사용해주세요.
-					</div>
-				</div>
-				<div class="form-floating">
-			  		<input type="password" name = "userPwd" class="form-control" id="userPwd" placeholder="Password">
+				<div class="form-floating" id = "myPagePwd">
+			  		<input type="password" th:value="${user.getPwd}" disabled name = "userPwd" class="form-control" id="userPwd" placeholder="Password">
 			  		<label for="floatingPassword">Password</label>
+			  		<button class="btn btn-success" type="button" id="chkIdBtn">비밀번호 변경</button>
 				</div>
 				<div class="form-floating">
-			  		<input type="text" name = "userPwd" class="form-control" id="userName" placeholder="Name">
+			  		<input type="text" th:value="${user.getName}" class="form-control" id="userName" placeholder="Name">
 			  		<label for="floatingPassword">Name</label>
 				</div>
 				<div class="form-floating">
-			  		<input type="text" name = "userPwd" class="form-control" id="phoneNumber" placeholder="PhoneNumber" onkeyup="addHyphen(this);">
+			  		<input type="text" th:value="${user.getPhoneNumber}" class="form-control" id="phoneNumber" placeholder="PhoneNumber" onkeyup="addHyphen(this);">
 			  		<label for="floatingPassword">PhoneNumber</label>
 				</div>
-				<button type="button" id ="signUpBtn" class="btn btn-primary">회원가입</button>
+				<button type="button" id ="signUpBtn" class="btn btn-primary">저장</button>
+				<button type="button" id ="cancelBtn" class="btn btn-light">취소</button>
 			</form>
 		</div>
 	</div>

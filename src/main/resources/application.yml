@@ -36,5 +36,5 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       
 mybatis:
-  type-aliases-package: com.kafka.administrate.mapper
+  type-aliases-package: com.kafka.administrate.model
   mapper-locations: classpath*:mybatis/**/*-mapper.xml

@@ -35,7 +35,11 @@ public class PageController {
 		
 		ListTopicsResult result = adminService.topicList();
 		model.addAttribute("topicList", result.names().get());
-	
+		
+	    HttpSession session = request.getSession();
+	    User loginUser = (User) session.getAttribute("userSeesionData");
+
+	    model.addAttribute("user",loginUser);
 		return "/index";
 	}
 	
@@ -66,6 +70,12 @@ public class PageController {
 	@GetMapping("/page/member/signIn")
 	public String test(Model model)  throws InterruptedException, ExecutionException {
 		
+		// 현재 세션 가져오기
+		HttpSession session = request.getSession();
+
+		// 세션 값 지우기
+		session.invalidate();
+		
 		return "/page/member/login";
 	}
 	@GetMapping("/page/chat")
@@ -77,6 +87,14 @@ public class PageController {
 		
 		model.addAttribute("countChatRoom",result);
 		return "/page/member/chat";
+	}
+	@GetMapping("/page/myPage")
+	public String myPage(Model model) {
+		
+		User loginUser = (User) request.getSession().getAttribute("userSeesionData");
+	    model.addAttribute("user",loginUser);
+	    
+		return "/page/member/myPage";
 	}
 	
 }

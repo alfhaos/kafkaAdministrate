@@ -26,7 +26,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public boolean signIn(User user) {
+	public User signIn(User user) {
 		// TODO Auto-generated method stub
 		return memberMapper.signIn(user);
 	}
