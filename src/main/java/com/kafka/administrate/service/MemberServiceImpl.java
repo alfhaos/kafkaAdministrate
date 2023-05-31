@@ -20,7 +20,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public boolean signUpUser(User user) {
+	public boolean mergeUser(User user) {
 		// TODO Auto-generated method stub
 		return memberMapper.signUpUser(user);
 	}

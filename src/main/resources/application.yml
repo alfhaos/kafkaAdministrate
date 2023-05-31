@@ -38,3 +38,5 @@ spring:
 mybatis:
   type-aliases-package: com.kafka.administrate.model
   mapper-locations: classpath*:mybatis/**/*-mapper.xml
+  configuration:
+    jdbc-type-for-null: varchar

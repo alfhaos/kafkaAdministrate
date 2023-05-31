@@ -7,7 +7,7 @@ public interface MemberService {
 	//유저 아이디 확인
 	boolean checkId(String id);
 
-	boolean signUpUser(User user);
+	boolean mergeUser(User user);
 
 	User signIn(User user);
 

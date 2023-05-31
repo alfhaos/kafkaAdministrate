@@ -46,11 +46,10 @@ public class memberController {
 		String pwd = PasswordUtils.encryptPassword((String) param.get("pwd"));
 		String name = (String) param.get("name");
 		String phoneNumber = (String) param.get("phoneNumber");
-		String profileId = (String) param.get("profileId");
 		
-		User user = new User(id,pwd,name,phoneNumber,profileId);
+		User user = new User(id,pwd,name,phoneNumber,"Default-Profile");
 		
-		boolean result = memberService.signUpUser(user);
+		boolean result = memberService.mergeUser(user);
 		
 		return result;
 	}
@@ -73,9 +72,50 @@ public class memberController {
 		
 		return result;
 	}
+	@PostMapping("/mergeUser")
+	public User updateUser(@RequestParam Map<String, Object> param,HttpServletRequest request, HttpSession session) throws Exception {
+
+		String id = (String) param.get("id");
+		String pwd = (String) param.get("pwd");
+		String name = (String) param.get("name");
+		String phoneNumber = (String) param.get("phoneNumber");
+		
+		User updateUser = new User(id,pwd,name,phoneNumber);
+		//업데이트 결과
+		boolean result = memberService.mergeUser(updateUser);
+		
+		updateUser = memberService.signIn(updateUser);
+		// 세션 속성제거
+		session.removeAttribute("userSeesionData");
+		// 세션값 설정
+		session.setAttribute("userSeesionData", updateUser);
+		// 세션 유지시간 3분
+	    session.setMaxInactiveInterval(30*60);
+		
+		return updateUser;
+	}
+	@PostMapping("/mergeUserFile")
+	public User updateUser(@RequestParam("file") MultipartFile file,HttpServletRequest request, HttpSession session) throws Exception {
+
+		//파일 생성 및 파일명 반환
+		String fileName = profileUpload(file);
+		//업데이트 유저 객체 생성
+		User updateUser = new User(request.getParameter("userId"),request.getParameter("pwd"),request.getParameter("name"),request.getParameter("phoneNumber"),fileName);
+		//업데이트 결과
+		boolean result = memberService.mergeUser(updateUser);
+		
+		updateUser = memberService.signIn(updateUser);
+		// 세션 속성제거
+		session.removeAttribute("userSeesionData");
+		// 세션값 설정
+		session.setAttribute("userSeesionData", updateUser);
+		// 세션 유지시간 3분
+	    session.setMaxInactiveInterval(30*60);
+		
+		return updateUser;
+	}
 	
-	@PostMapping("/profileUpload")
-	public String profileUpload(@RequestParam("profileImage") MultipartFile file, Model model) throws Exception {
+	public String profileUpload(MultipartFile file) throws Exception {
 		
 		User loginUser = (User) request.getSession().getAttribute("userSeesionData");
 		String storageDirectory = "C:\\workSpace\\profile";
@@ -83,15 +123,15 @@ public class memberController {
 		
 		// 파일확장자 인덱스
 		int extensionIndex = fileName.lastIndexOf(".");
-		String[] divFileName = fileName.split(".");
-		String filePath = storageDirectory + File.separator + fileName;
-		
+		String[] divFileName = fileName.split("[.]");
+		String filePath = storageDirectory + File.separator;
+
 		try {
 		  if(extensionIndex >= 0) {
 			  // 파일 저장 성공
 			  String extension = fileName.substring(extensionIndex + 1);
 			  fileName = divFileName[0] + "_" + loginUser.getId() +"."+extension;
-			  file.transferTo(new File(filePath));
+			  file.transferTo(new File(filePath + fileName));
 			  
 		  } else {
 			  // 파일 확장자명이 없을경우
@@ -100,8 +140,9 @@ public class memberController {
 
 		} catch (IOException e) {
 		  // 파일 저장 실패
+			throw new IOException("파일 생성 실패");
 		}
 		
-		return "redirect:/page/member/myPage";
+		return fileName;
 	}
 }

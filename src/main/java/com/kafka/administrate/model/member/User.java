@@ -2,6 +2,8 @@ package com.kafka.administrate.model.member;
 
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class User {
 	
 	String id;
@@ -83,13 +85,6 @@ public class User {
 		this.pwd = pwd;
 		this.chkId = chkId;
 	}
-	public User(String id, String pwd, String name, String phoneNumber) {
-		super();
-		this.id = id;
-		this.pwd = pwd;
-		this.name = name;
-		this.phoneNumber = phoneNumber;
-	}
 	public User(String id, String pwd, String name, String phoneNumber, String profileId) {
 		super();
 		this.id = id;
@@ -97,6 +92,13 @@ public class User {
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.profileId = profileId;
+	}
+	public User(String id, String pwd, String name, String phoneNumber) {
+		super();
+		this.id = id;
+		this.pwd = pwd;
+		this.name = name;
+		this.phoneNumber = phoneNumber;
 	}
 	@Override
 	public String toString() {

@@ -11,6 +11,7 @@
 	  	<result property="authority"   column="authority" />
 	  	<result property="name"        column="name" />
 	  	<result property="phoneNumber" column="phone_number" />
+	  	<result property="profileId" column="profile_id" />
 	</resultMap>
  	
  	<select id="checkId" resultType="boolean">
@@ -29,13 +30,16 @@
 			ON (A.ID = #{id})
 		WHEN MATCHED THEN 
 			UPDATE 
-				SET  A.UDATE     = SYSDATE 
-					,A.AUTHORITY = 'U'
+				SET  A.AUTHORITY = 'U'
 					,A.NAME      = #{name}
 					,A.PHONE_NUMBER = #{phoneNumber}
+					<if test="profileId != null">
+						,A.PROFILE_ID = #{profileId}
+					</if>
+					,A.UDATE = SYSDATE
 		WHEN NOT MATCHED THEN 
-			INSERT (A.ID,A.PWD,A.UDATE,A.AUTHORITY,A.NAME,A.PHONE_NUMBER)
-			VALUES (#{id},#{pwd},SYSDATE,'U',#{name},#{phoneNumber})
+			INSERT (A.ID,A.PWD,A.UDATE,A.AUTHORITY,A.NAME,A.PHONE_NUMBER,A.PROFILE_ID)
+			VALUES (#{id},#{pwd},SYSDATE,'U',#{name},#{phoneNumber},#{profileId})
 	</update>
  	
  	<select id="signIn" resultMap="userResultMap">
@@ -46,6 +50,7 @@
            ,AUTHORITY
            ,NAME
            ,PHONE_NUMBER
+           ,PROFILE_ID
 		 FROM
 			KAFKA_USER
 		 WHERE

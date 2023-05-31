@@ -9,6 +9,9 @@
     <!--    <link rel="stylesheet" th:href="@{/css/page/home.css}" >-->
 
    	<style>
+		#inputGroup {
+			height: 1%;
+		}
      	#kafkaLogo {
 			 width: 10%;
 		 }
@@ -114,7 +117,13 @@
    		$(() => {
 			var chkResult = false;
 			var chkResultCnt = 0;
-			var profileId = null; 
+			var profileId = null;
+			
+			$("#fileDel").click((e) => {
+				$(".profile").attr("src", "/images/member/Default-Profile.png");
+			});
+			
+			// 사진 변경시 프로필 사진에 출력 
 			$("#fileInput").on('change', function(event) {
   				const file = event.target.files[0];
   				const reader = new FileReader();
@@ -132,30 +141,50 @@
 			
 			$("#signUpBtn").click((e) => {
 				var userId 		   = $("#userId").val();
-				var pwd    		   = $("#userPwd").val();
 				var name    	   = $("#userName").val();
 				var phoneNumber    = $("#phoneNumber").val();
-				
-				$.ajax({
-		      			url:'/member/signUp',
+				var pwd			   = $("#userPwd").val();
+
+				const formData = new FormData();
+				// 파일 입력 요소 가져오기
+    			const fileInput = $('#fileInput')[0]; 
+		
+				//파일 유무에 따른 ajax 분기
+    			if(fileInput.files.length == 0) {
+					$.ajax({
+		      			url:'/member/mergeUser',
 		      			type:'post',
 		      			data: {"id"   : userId,
 		      				   "pwd"  : pwd,
 		      				   "name" : name,
-		      				   "phoneNumber" : phoneNumber,
-		      				   "profileId" : profileId},
+		      				   "phoneNumber" : phoneNumber},
 		      			success:function(result){
-							
-							if(result) {
-								alert("저장 완료.");
-								location.href = "/page/member/signIn";
-							} else {
-								alert("저장에 실패했습니다.")
-							}
-						
+							alert("저장되었습니다.");
 	      			},
-	      				error : function(){alert("저장에 실패했습니다.");}
-	      		});
+	      				error : function(){alert("저장 실패.");}
+	      			});
+				} else {
+					
+	    			formData.append('file', fileInput.files[0]); // FormData에 파일 추가
+	    			formData.append('userId',userId);
+	    			formData.append('pwd',pwd);
+	    			formData.append('name',name);
+	    			formData.append('phoneNumber',phoneNumber);
+	
+					$.ajax({
+			      			url:'/member/mergeUserFile',
+			      			type:'post',
+			      			data: formData,
+			      			contentType: false,
+	      					processData: false,
+			      			success:function(result){
+								//console.log(result.name);
+								alert("저장 완료.");
+							
+		      			},
+		      				error : function(){alert("저장에 실패했습니다.");}
+		      		});
+				}
 				
 			});
 			
@@ -166,43 +195,47 @@
 		  	e.value += '-';
 		  	}
 		 }
+		function reload(result){
+			
+			 
+		}
     </script>
 </th:block>
 
 <!-- Content -->
 <div layout:fragment="content" class = "content">
-	<div class = "loginContainer">	 
-			<div class="profileContainer" style="background: whitesmoke;">
-			    <img class="profile" th:src="@{/images/member/Default-Profile.png}">
-			</div>
-			<div>
-				<form action="/member/profileUpload" method="post" enctype="multipart/form-data">
- 					<input type="file" id = "fileInput" name="profileImage">
- 					<input type="submit" value="Upload">
+		<div class = "loginContainer">	 
+				<div class="profileContainer" style="background: whitesmoke;">
+				    <img class="profile" th:src="@{/images/member/Default-Profile.png}">
+				</div>
+				<div>
+					<div class="input-group" id = "inputGroup">
+	  					<input type="file" class="form-control" id="fileInput" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="profileImage">
+	  					<button class="btn btn-outline-secondary" type="button" id="fileDel">삭제</button>
+					</div>
+				</div>
+			<div class="signUpInputContainer">
+				<form class="signUpForm">
+					<div class="input-group mb-3">
+					  <input type="text" th:value="${user.getId}" disabled name ="userId" id="userId" class="form-control" placeholder="ID" aria-label="Recipient's username" aria-describedby="button-addon2">
+					</div>
+					<div class="form-floating" id = "myPagePwd">
+				  		<input type="password" th:value="${user.getPwd}" disabled name = "userPwd" class="form-control" id="userPwd" placeholder="Password">
+				  		<label for="floatingPassword">Password</label>
+				  		<button class="btn btn-success" type="button" id="chkIdBtn">비밀번호 변경</button>
+					</div>
+					<div class="form-floating">
+				  		<input type="text" th:value="${user.getName}" class="form-control" id="userName" placeholder="Name">
+				  		<label for="floatingPassword">Name</label>
+					</div>
+					<div class="form-floating">
+				  		<input type="text" th:value="${user.getPhoneNumber}" class="form-control" id="phoneNumber" placeholder="PhoneNumber" onkeyup="addHyphen(this);">
+				  		<label for="floatingPassword">PhoneNumber</label>
+					</div>
+					<button type="button" id ="signUpBtn" class="btn btn-primary">저장</button>
+					<button type="button" id ="cancelBtn" class="btn btn-light">취소</button>
 				</form>
 			</div>
-		<div class="signUpInputContainer">
-			<form class="signUpForm">
-				<div class="input-group mb-3">
-				  <input type="text" th:value="${user.getId}" disabled name ="userId" id="userId" class="form-control" placeholder="ID" aria-label="Recipient's username" aria-describedby="button-addon2">
-				</div>
-				<div class="form-floating" id = "myPagePwd">
-			  		<input type="password" th:value="${user.getPwd}" disabled name = "userPwd" class="form-control" id="userPwd" placeholder="Password">
-			  		<label for="floatingPassword">Password</label>
-			  		<button class="btn btn-success" type="button" id="chkIdBtn">비밀번호 변경</button>
-				</div>
-				<div class="form-floating">
-			  		<input type="text" th:value="${user.getName}" class="form-control" id="userName" placeholder="Name">
-			  		<label for="floatingPassword">Name</label>
-				</div>
-				<div class="form-floating">
-			  		<input type="text" th:value="${user.getPhoneNumber}" class="form-control" id="phoneNumber" placeholder="PhoneNumber" onkeyup="addHyphen(this);">
-			  		<label for="floatingPassword">PhoneNumber</label>
-				</div>
-				<button type="button" id ="signUpBtn" class="btn btn-primary">저장</button>
-				<button type="button" id ="cancelBtn" class="btn btn-light">취소</button>
-			</form>
 		</div>
-	</div>
 </div>
 </html>
