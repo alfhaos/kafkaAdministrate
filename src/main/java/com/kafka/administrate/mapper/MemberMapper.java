@@ -1,5 +1,7 @@
 package com.kafka.administrate.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.kafka.administrate.model.member.User;
@@ -18,5 +20,8 @@ public interface MemberMapper {
 
 	//채팅 목록 확인
 	public int countChatRoom(User loginUser);
+
+	//채팅리스트
+	public List<User> memberChatLst(User loginUser);
 	
 }

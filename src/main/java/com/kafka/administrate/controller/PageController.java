@@ -1,5 +1,6 @@
 package com.kafka.administrate.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -84,8 +85,11 @@ public class PageController {
 	    HttpSession session = request.getSession();
 	    User loginUser = (User) session.getAttribute("userSeesionData");
 		int result = memberService.countChatRoom(loginUser);
+		List<User> chatUserLst = memberService.memberChatLst(loginUser);
 		
 		model.addAttribute("countChatRoom",result);
+		model.addAttribute("chatUserLst", chatUserLst);
+		
 		return "/page/member/chat";
 	}
 	@GetMapping("/page/myPage")

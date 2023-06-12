@@ -66,4 +66,18 @@
 		 WHERE ID = #{id}
 		   AND DEL_YN = 'N'
 	 </select>
+	 <select id="memberChatLst" resultMap="userResultMap">
+		 SELECT 
+			ID
+           ,PWD
+           ,UDATE
+           ,AUTHORITY
+           ,NAME
+           ,PHONE_NUMBER
+           ,PROFILE_ID
+		 FROM
+			KAFKA_USER
+		 WHERE
+			ID NOT IN(#{id})
+	 </select>
  </mapper>

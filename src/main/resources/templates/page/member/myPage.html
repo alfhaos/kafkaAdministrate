@@ -97,7 +97,7 @@
 		    object-fit: cover;
 		}
 		#userPwd {
-			width: 64%;
+			width: 70%;
 		}
 		#myPagePwd {
 			display: flex;
@@ -206,7 +206,7 @@
 <div layout:fragment="content" class = "content">
 		<div class = "loginContainer">	 
 				<div class="profileContainer" style="background: whitesmoke;">
-				    <img class="profile" th:src="@{/images/member/Default-Profile.png}">
+				    <img class="profile" th:src="@{/images/member/{profileId}(profileId=${user.getProfileId})}">
 				</div>
 				<div>
 					<div class="input-group" id = "inputGroup">

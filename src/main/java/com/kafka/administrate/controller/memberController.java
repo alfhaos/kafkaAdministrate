@@ -65,7 +65,9 @@ public class memberController {
 		if(user != null) {
 		    // 세션값 설정
 			session.setAttribute("userSeesionData", user);
-			// 세션 유지시간 3분
+			session.setAttribute("profilePath","/images/member/" + user.getProfileId());
+			
+			// 세션 유지시간 30분
 		    session.setMaxInactiveInterval(30*60);
 		    result = true;
 		}
@@ -89,7 +91,7 @@ public class memberController {
 		session.removeAttribute("userSeesionData");
 		// 세션값 설정
 		session.setAttribute("userSeesionData", updateUser);
-		// 세션 유지시간 3분
+		// 세션 유지시간 30분
 	    session.setMaxInactiveInterval(30*60);
 		
 		return updateUser;
@@ -109,7 +111,7 @@ public class memberController {
 		session.removeAttribute("userSeesionData");
 		// 세션값 설정
 		session.setAttribute("userSeesionData", updateUser);
-		// 세션 유지시간 3분
+		// 세션 유지시간 30분
 	    session.setMaxInactiveInterval(30*60);
 		
 		return updateUser;
@@ -118,7 +120,7 @@ public class memberController {
 	public String profileUpload(MultipartFile file) throws Exception {
 		
 		User loginUser = (User) request.getSession().getAttribute("userSeesionData");
-		String storageDirectory = "C:\\workSpace\\profile";
+		String storageDirectory = "C:\\Users\\alfha\\git\\kafkaAdministrate\\src\\main\\resources\\static\\images\\member";
 		String fileName = file.getOriginalFilename();
 		
 		// 파일확장자 인덱스

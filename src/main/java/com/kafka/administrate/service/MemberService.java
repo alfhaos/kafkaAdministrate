@@ -1,5 +1,7 @@
 package com.kafka.administrate.service;
 
+import java.util.List;
+
 import com.kafka.administrate.model.member.User;
 
 public interface MemberService {
@@ -12,5 +14,7 @@ public interface MemberService {
 	User signIn(User user);
 
 	int countChatRoom(User loginUser);
+
+	List<User> memberChatLst(User loginUser);
 
 }
